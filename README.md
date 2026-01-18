@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# smartDebugAI – AI-Powered Code & File Debugging Platform
 
-## Getting Started
+## Overview
 
-First, run the development server:
+smartDebugAI is an intelligent debugging system that leverages **Google Gemini AI** to automatically analyze, detect, and correct errors in source code. Users can either paste code directly into an advanced editor or upload source files for automated debugging. The platform provides clear error explanations, best-practice suggestions, and optimized corrected code.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The system is built using **Next.js, MySQL, Prisma ORM, and Google Gemini**, following a scalable and modular architecture suitable for real-world applications.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- AI-based automatic code debugging using **Gemini LLM**
+- Supports multiple programming languages
+- Monaco-based advanced code editor
+- File upload support for debugging source files
+- Detailed error explanations and best practice suggestions
+- Generates corrected and optimized code
+- Stores debugging history in **MySQL**
+- Scalable service-based backend architecture
+- Clean and modern UI using **Next.js + Tailwind CSS**
+- REST API-based communication
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Layer | Technology |
+|------|------------|
+| Frontend | Next.js  |
+| UI Styling | Tailwind CSS |
+| Code Editor | Monaco Editor |
+| Backend | Next.js API Routes |
+| AI Model | Google Gemini (gemini-1.5-pro) |
+| Database | MySQL |
+| ORM | Prisma |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## System Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+smartDebugAI follows a layered architecture:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Frontend (Client Layer)**
+- Next.js UI
+- Code editor component
+- File upload module
+- Debug results visualization
+
+**Backend (Application Layer)**
+- REST APIs in Next.js
+- Validation service
+- Debugging service
+- AI integration service
+
+**AI Layer**
+- Google Gemini for code analysis
+
+**Data Layer**
+- MySQL database using Prisma ORM
+- Stores debug jobs, results, and uploaded files
+
+---
+
+
