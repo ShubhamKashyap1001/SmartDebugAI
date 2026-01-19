@@ -54,7 +54,8 @@ export default function Home() {
 
       <div className="bg-gray-900 p-6 rounded-xl shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Paste Your Error</h2>
-        <CodeEditor onSubmit={handleDebug} />
+        <CodeEditor language={language} onSubmit={handleDebug} />
+
       </div>
 
       <div className="bg-gray-900 p-6 rounded-xl shadow-lg">

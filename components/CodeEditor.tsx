@@ -1,22 +1,38 @@
 "use client";
+
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
+import type { SupportedLanguage } from "@/types/language";
 
-export default function CodeEditor({ onSubmit }: { onSubmit: (code: string) => void }) {
-  const [code, setCode] = useState("");
+interface CodeEditorProps {
+  language: SupportedLanguage;   // selected language from parent
+  onSubmit: (code: string) => void;
+}
+
+export default function CodeEditor({ language, onSubmit }: CodeEditorProps) {
+  const [code, setCode] = useState<string>(""); // blank editor
 
   return (
     <div>
       <Editor
         height="350px"
-        defaultLanguage="typescript"
+        language={language}         
         theme="vs-dark"
         value={code}
         onChange={(value) => setCode(value || "")}
+        options={{
+          fontSize: 14,
+          minimap: { enabled: false },
+          automaticLayout: true,
+          scrollBeyondLastLine: false,
+          wordWrap: "on",
+        }}
       />
+
       <button
         onClick={() => onSubmit(code)}
-        className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+        disabled={!code.trim()}
+        className="mt-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-4 py-2 rounded"
       >
         Debug Code
       </button>
