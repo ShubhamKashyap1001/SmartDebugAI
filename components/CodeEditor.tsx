@@ -9,7 +9,7 @@ interface CodeEditorProps {
   onSubmit: (code: string) => void;
 }
 
-export default function CodeEditor({ language, onSubmit }: CodeEditorProps) {
+export default function CodeEditor() {
   const [errorText, setErrorText] = useState<string>(""); 
   const [data, setData] = useState<string>("");
   const test = async () => {
