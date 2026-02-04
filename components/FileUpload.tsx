@@ -10,6 +10,24 @@ export default function FileUpload({ onResult }: { onResult: (data: any) => void
   const [filePath, setFilePath] = useState("");
   const [loading, setLoading] = useState(false);
 
+  function extractGitHubInfo(input: string) {
+    const cleaned = input.trim();
+
+    // Case 1: plain username
+    if (!cleaned.startsWith("http")) {
+      return { owner: cleaned, repoFromUrl: "" };
+    }
+    try {
+      const url = new URL(cleaned);
+      const parts = url.pathname.split("/").filter(Boolean); // remove empty
+      const owner = parts[0] || "";
+      const repoFromUrl = parts[1] || "";
+      return { owner, repoFromUrl };
+    } catch {
+      return { owner: cleaned, repoFromUrl: "" };
+    }
+  }
+
   async function handleLocalUpload() {
     if (!file) return;
 
@@ -31,19 +49,39 @@ export default function FileUpload({ onResult }: { onResult: (data: any) => void
     if (!githubUser || !repo || !filePath) return;
 
     setLoading(true);
+    const { owner, repoFromUrl } = extractGitHubInfo(githubUser);
+    const finalRepo = repoFromUrl || repo;
 
     const res = await fetch("/api/github-fetch", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: githubUser,
-        repo,
+        owner: owner,           
+        repo: finalRepo,       
         path: filePath,
+        branch: "main",        
       }),
     });
 
     const data = await res.json();
-    onResult(data.result.result);
+    if (data?.code) {
+      const debugRes = await fetch("/api/debug", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: data.code,
+          fileName: data.fileName || filePath,
+          language: filePath.endsWith(".ts") || filePath.endsWith(".tsx") ? "typescript" : "javascript",
+        }),
+      });
+
+      const debugData = await debugRes.json();
+      onResult(debugData?.data?.result);
+    } else {
+      // fallback if your API already returns debug result
+      onResult(data.result?.result || data);
+    }
+
     setLoading(false);
   }
 
@@ -90,15 +128,21 @@ export default function FileUpload({ onResult }: { onResult: (data: any) => void
         <div className="space-y-3">
           <input
             type="text"
-            placeholder="GitHub Username (e.g. vercel)"
+            placeholder="GitHub Username or URL (e.g. ShubhamKashyap1001 OR https://github.com/ShubhamKashyap1001/SmartDebugAI)"
             value={githubUser}
-            onChange={(e) => setGithubUser(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setGithubUser(value);
+
+              const { repoFromUrl } = extractGitHubInfo(value);
+              if (repoFromUrl) setRepo(repoFromUrl);
+            }}
             className="w-full p-2 bg-black border border-gray-700 rounded"
           />
 
           <input
             type="text"
-            placeholder="Repository Name (e.g. next.js)"
+            placeholder="Repository Name (e.g. SmartDebugAI)"
             value={repo}
             onChange={(e) => setRepo(e.target.value)}
             className="w-full p-2 bg-black border border-gray-700 rounded"
